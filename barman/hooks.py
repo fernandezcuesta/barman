@@ -184,12 +184,15 @@ class HookScriptRunner(object):
         try:
             if self.script:
                 _logger.debug("Attempt to run %s: %s", self.name, self.script)
+                handler = Command.make_logging_handler(_logger.level)
                 cmd = Command(
                     self.script,
                     env_append=self.environment,
                     path=self.backup_manager.server.path,
                     shell=True,
                     check=False,
+                    out_handler=handler,
+                    err_handler=handler,
                 )
                 self.exit_status = cmd()
                 if self.exit_status != 0:
